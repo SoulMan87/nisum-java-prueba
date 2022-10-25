@@ -1,7 +1,8 @@
-package com.soulrebel.evaluacion_java_nisum.model;
+package com.soulrebel.evaluacion_java_nisum.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,13 +18,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -32,12 +32,13 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
-    private Long idUser;
+    @Column(columnDefinition = "uuid", updatable = false, name = "id_user")
+    private UUID idUser;
 
     @NotEmpty(message = "Field 'Name' is required.")
     private String name;
@@ -50,24 +51,29 @@ public class User {
     @NotEmpty(message = "Field 'Password' is required.")
     private String password;
 
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @Column(name = "modified")
+    private LocalDateTime modified;
+
+    @Column(name = "last_login")
+    private LocalDateTime last_login;
+
+    @Column(name = "token")
+    private String token;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
     private List<Phone> phones;
 
-    @Temporal(TemporalType.DATE)
-    private Date created;
-
-    @Temporal(TemporalType.DATE)
-    private Date modified;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "last_login")
-    private Date lastLogin;
-
-    private String token;
-
     @Column(name = "is_active")
     private Integer isActive;
+
+    public static boolean checkUserEmail(String email) {
+        var EMAIL_PATTERN = String.format("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        return email.matches(EMAIL_PATTERN);
+    }
 
 }

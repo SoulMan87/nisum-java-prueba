@@ -1,4 +1,4 @@
-package com.soulrebel.evaluacion_java_nisum.model;
+package com.soulrebel.evaluacion_java_nisum.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
