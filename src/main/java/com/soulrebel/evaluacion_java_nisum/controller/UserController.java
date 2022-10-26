@@ -14,11 +14,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface UserController {
 
     @PostMapping(value = "/create", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Object> addUser(@RequestBody @Validated User user);
+    ResponseEntity addUser(@RequestBody User user);
 
     @PostMapping(value = "/access", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Object> userAccess(@RequestBody @Validated User user);
+    ResponseEntity userAccess(@RequestBody User user);
 
     @PostMapping(value = "/token", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Object> userToken(@RequestHeader(value = "token", required = false) String token, @RequestParam String id);
+    ResponseEntity userToken(@RequestHeader(value = "token", required = false) String token, @RequestParam String id);
 }

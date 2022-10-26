@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    User findUserByEmail(String email);
+    User findByEmail(String email);
 
     Optional<UserResponse> saveUser(User user);
 

@@ -1,6 +1,5 @@
 package com.soulrebel.evaluacion_java_nisum.utils;
 
-import com.soulrebel.evaluacion_java_nisum.model.Password;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Objects;
@@ -15,9 +14,9 @@ public class PasswordUtils {
         return bCryptPasswordEncoder.encode(password);
     }
 
-    public static boolean validatedPassword(Password password) {
+    public static boolean validatedPassword(String password, String encodedPassword) {
         var bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder.matches(password.getPassword(), password.getEncodedPassword());
+        return bCryptPasswordEncoder.matches(password, encodedPassword);
     }
 
 

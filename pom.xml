@@ -31,10 +31,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -72,13 +68,25 @@
             <version>1.6.9</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -122,7 +130,7 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
-                            <name>soulrebeltech/${project.artifactId}</name>
+                            <name>soulrebel/${project.artifactId}</name>
                             <build>
                                 <assembly>
                                     <descriptorRef>artifact</descriptorRef>
@@ -143,16 +151,15 @@
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/com/soulrebel/ml/config/**</exclude>
-                        <exclude>**/com/soulrebel/ml/Bootstrap.class</exclude>
-                        <exclude>**/com/soulrebel/ml/entity/**</exclude>
-                        <exclude>**/com/soulrebel/ml/enums/**</exclude>
-                        <exclude>**/com/soulrebel/ml/logic/**</exclude>
-                        <exclude>**/com/soulrebel/ml/repository/**</exclude>
-                        <exclude>**/com/soulrebel/ml/service/**</exclude>
-                        <exclude>**/com/soulrebel/ml/**</exclude>
-                        <exclude>**/com/soulrebel/ml/model/**</exclude>
-                        <exclude>**/com/soulrebel/ml/controller/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/config/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/Bootstrap.class</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/entity/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/repository/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/service/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/model/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/controller/**</exclude>
+                        <exclude>**/com/soulrebel/evaluacion_java_nisum/utils/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

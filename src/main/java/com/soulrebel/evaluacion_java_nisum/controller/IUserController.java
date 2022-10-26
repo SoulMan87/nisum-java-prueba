@@ -1,7 +1,6 @@
 package com.soulrebel.evaluacion_java_nisum.controller;
 
 import com.soulrebel.evaluacion_java_nisum.entity.User;
-import com.soulrebel.evaluacion_java_nisum.model.Password;
 import com.soulrebel.evaluacion_java_nisum.model.UserResponse;
 import com.soulrebel.evaluacion_java_nisum.service.UserService;
 import com.soulrebel.evaluacion_java_nisum.utils.PasswordUtils;
@@ -33,7 +32,7 @@ public class IUserController implements UserController {
     private final UserService service;
 
     @Override
-    public ResponseEntity<Object> addUser(User user) {
+    public ResponseEntity addUser(User user) {
 
         var response = new Response<>();
 
@@ -41,23 +40,29 @@ public class IUserController implements UserController {
             response.setMessage(MESSAGE);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
         }
-        if (User.checkUserEmail(user.getEmail())) {
+        if (!User.checkUserEmail(user.getEmail())) {
             response.setMessage(EMAIL_MESSAGE);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
         }
-        if (Objects.nonNull(service.findUserByEmail(user.getEmail()))) {
+        if (service.findByEmail(user.getEmail()) != null) {
             response.setMessage(EMAIL_ALREADY_EXIST);
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
+            return ResponseEntity.badRequest().body(response);
         }
         return ResponseEntity.status(HttpStatus.OK).body(service.saveUser(user));
     }
 
     @Override
-    public ResponseEntity<Object> userAccess(User user) {
+    public ResponseEntity userAccess(User user) {
+
+        var userByEmail = service.findByEmail(user.getEmail());
 
         var response = new Response<>();
-        if (Objects.nonNull(user) && PasswordUtils.validatedPassword(buildPassword(user))) {
-            return ResponseEntity.ok().body(buildUserResponse(user));
+        if (Objects.nonNull(userByEmail) && (PasswordUtils.validatedPassword(user.getPassword(),
+                userByEmail.getPassword()))) {
+
+            var userResponse = new UserResponse(userByEmail.getId(), userByEmail.getCreated()
+                    , userByEmail.getModified(), userByEmail.getLast_login(), userByEmail.getToken(), userByEmail.isActive());
+            return ResponseEntity.ok().body(userResponse);
         } else {
             response.setMessage(INVALID_USER);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -66,7 +71,7 @@ public class IUserController implements UserController {
     }
 
     @Override
-    public ResponseEntity<Object> userToken(String token, String id) {
+    public ResponseEntity userToken(String token, String id) {
 
         var response = new Response<>();
 
@@ -104,32 +109,16 @@ public class IUserController implements UserController {
         }
     }
 
-    private Password buildPassword(User user) {
-        var userByEmail = service.findUserByEmail(user.getEmail());
-        return Password.builder().password(user.getPassword())
-                .encodedPassword(userByEmail.getPassword())
-                .build();
-    }
-
-    private UserResponse buildUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getIdUser())
-                .created(user.getCreated())
-                .modified(user.getModified())
-                .last_login(user.getLast_login())
-                .token(user.getToken())
-                .build();
-    }
 
     private UserResponse buildUserResponseUUID(UUID uuid) {
         var userUUid = service.findByUUID(uuid);
         return UserResponse.builder()
-                .id(userUUid.get().getIdUser())
+                .id(userUUid.get().getId())
                 .created(userUUid.get().getCreated())
                 .modified(userUUid.get().getModified())
                 .last_login(userUUid.get().getLast_login())
                 .token(userUUid.get().getToken())
                 .build();
     }
-    
+
 }

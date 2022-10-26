@@ -9,5 +9,8 @@ public class Constants {
     public static final String INVALID_TOKE_OR_ID = "The token and/or id field cannot be empty!";
     public static final String NOT_AUTHORIZED = "Not authorized";
     public static final String INVALID_SESSION = "Invalid session";
+    public static final String EMAIL = "joseperez@gmail.com";
+    public static final String NAME = "jose";
     public static final Integer DURATION = 30;
+    public static final String PASSWORD = "3e546t0";
 }

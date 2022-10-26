@@ -1,54 +1,40 @@
 package com.soulrebel.evaluacion_java_nisum.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@ToString
-@Builder
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "uuid", updatable = false, name = "id_user")
-    private UUID idUser;
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false, name = "id")
+    private UUID id;
 
-    @NotEmpty(message = "Field 'Name' is required.")
+    @Column(name = "name")
     private String name;
 
-    @NotEmpty(message = "Field 'Email' is required.")
-    @Email(message = "Field 'Email' must have a correct format.")
+    @Column(name = "email")
     private String email;
 
-    @Pattern(regexp = "[0-9]{2}[A-Z][a-z]*", message = "Field 'Password' must have a correct format.")
-    @NotEmpty(message = "Field 'Password' is required.")
+    @Column(name = "password")
     private String password;
 
     @Column(name = "created")
@@ -65,15 +51,38 @@ public class User {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id")
     private List<Phone> phones;
 
-    @Column(name = "is_active")
-    private Integer isActive;
+    @Column(name = "isActive")
+    private boolean active = (active()) ? true : false;
+
+    public User() {
+
+    }
 
     public static boolean checkUserEmail(String email) {
-        var EMAIL_PATTERN = String.format("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         return email.matches(EMAIL_PATTERN);
     }
 
+    public User(String name, String email, String password, List<Phone> phones) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.created = LocalDateTime.now();
+        this.modified = LocalDateTime.now();
+        this.last_login = LocalDateTime.now();
+        this.phones = phones;
+    }
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
+    public boolean active() {
+        return true;
+    }
 }
