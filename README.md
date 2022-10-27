@@ -1,8 +1,6 @@
 # Evaluación Java Nisum
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-## Requested Requirements.
 
 Desarrolle una aplicación que exponga una API RESTful de creación de usuarios.
 Todos los endpoints deben aceptar y retornar solamente JSON, inclusive al para los mensajes de error.
